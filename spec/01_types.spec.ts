@@ -244,5 +244,117 @@ describe('declaring variables', () => {
 
 
         });
+        it('array destructuring', () => {
+            const someNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+            const [first, second, , fourth] = someNumbers;
+
+            expect(first).toBe(1);
+            expect(second).toBe(2);
+            expect(fourth).toBe(4);
+
+            const [head, ...rest] = someNumbers;
+
+            expect(first).toBe(1);
+            expect(rest).toEqual([2, 3, 4, 5, 6, 7, 8, 9]);
+        });
+        it('object destructuring', () => {
+            const person = {
+                firstName: 'Ben',
+                lastName: 'Solo',
+                job: 'Jedi Trainee'
+            };
+
+            const { firstName, lastName: ln, ...rest } = person;
+            expect(firstName).toBe('Ben');
+            expect(ln).toBe('Solo');
+            expect(rest).toEqual({ job: 'Jedi Trainee' });
+
+            // expect([1, 2, 3]).toEqual([1, 3, 3]);
+        });
+
+        it('array spread operator', () => {
+            const numbers = [1, 2, 3];
+            const newNumbers = [0, ...numbers, 4];
+            expect(newNumbers).toEqual([0, 1, 2, 3, 4]);
+        });
+
+        it('object spread operator', () => {
+            const movie = { title: 'Star Wars', director: 'Lucas', yearReleased: 1978 };
+            const movie2 = { ...movie, yearReleased: 1977 };
+
+            expect(movie2).toEqual({ title: 'Star Wars', director: 'Lucas', yearReleased: 1977 });
+        });
+    });
+
+    describe('object literals', () => {
+        it('has them', () => {
+
+            interface Person {
+                name: string;
+                department: string;
+                salary: number;
+                manager?: string;
+            }
+
+            const bob: Person = {
+                name: 'Bob Smith',
+                department: 'QA',
+                salary: 100_000,
+                manager: 'Mary'
+            };
+
+            const mary: Person = {
+                name: 'Mary Jones',
+                department: 'CEO',
+                salary: 80_000
+            };
+
+
+            function printEmployeeInfo(p: Person) {
+                let prelude = `Person ${p.name} works in ${p.department} and makes ${p.salary}`;
+                if (p.manager) {
+                    prelude += ` and they are managed by ${p.manager}`;
+                } else {
+                    prelude += ' and they have no manager';
+                }
+                console.log(prelude);
+            }
+
+
+            printEmployeeInfo(bob);
+            printEmployeeInfo(mary);
+        });
+        it('has truthy and falsy values', () => {
+            expect('tacos').toBeTruthy();
+            expect('').toBeFalsy();
+            expect(0).toBeFalsy();
+            expect(-1).toBeTruthy();
+            expect(undefined).toBeFalsy();
+            expect(null).toBeFalsy();
+            expect(false).toBeFalsy();
+
+        });
+
+        it('has duck typing', () => {
+
+            interface MessageHavingThing { message: string; }
+            function logMessage(thingy: MessageHavingThing) {
+                console.log('Got: ' + thingy.message);
+            }
+
+            logMessage({ message: 'Call Your Mom' });
+
+            // logMessage();
+
+            const book = {
+                title: 'Clean your garage',
+                message: 'A clean garage is a sign of a healthy mind'
+            };
+
+            logMessage(book);
+
+
+        });
     });
 });
