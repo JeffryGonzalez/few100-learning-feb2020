@@ -358,3 +358,95 @@ describe('declaring variables', () => {
         });
     });
 });
+describe('extending interfaces', () => {
+    it('example', () => {
+
+        type MpaaRating = 'G' | 'PG' | 'PG13' | 'R' | 'NC-17';
+
+        interface Movie {
+            title: string;
+            director: string;
+            yearReleased: number;
+            cast: { [key: string]: CastMember };
+            mpaaRating: MpaaRating;
+        }
+
+        interface CastMember {
+            role: string;
+            actor: string;
+        }
+        const starWars: Movie = {
+            title: 'Star Wars Iv: A New Hope',
+            director: 'Lucas',
+            yearReleased: 1977,
+            cast: {
+                'Luke Skywalker': { role: 'Luke', actor: 'Mark Hamill' },
+                Han: { role: 'Han Solo', actor: 'Harrison Ford' }
+            },
+            mpaaRating: 'PG'
+        };
+
+        expect(starWars.cast['Luke Skywalker'].actor).toBe('Mark Hamill');
+        expect(starWars.cast.Han.actor).toBe('Harrison Ford');
+
+    });
+    it('one more example', () => {
+
+        const bob = {
+            name: 'Bob smith',
+            phone: '555-1212',
+            department: 'DEV',
+            salary: 850_000
+        };
+
+        const jenny: PhoneablePerson = {
+            name: 'Jenny',
+            phone: '867-5309',
+            location: 'PA',
+            email: 'jenny@tutone.net'
+        };
+
+
+        interface PhoneablePerson { name: string; phone: string;[key: string]: any; }
+        function printPhoneList(person: PhoneablePerson) {
+            console.log(`Call ${person.name} at ${person.phone}`);
+        }
+
+        printPhoneList(bob);
+        printPhoneList(jenny);
+
+        const bill: PhoneablePerson = {
+            name: 'Bill Hulley',
+            phone: '788-6675',
+            location: 'WA',
+            hairColor: 'GRAY'
+        };
+    });
+});
+
+describe('generics briefly', () => {
+    it('creating a generic dictionary', () => {
+
+        interface Dictionary<T> {
+            [key: string]: T;
+        }
+        interface Vehicle {
+            make: string;
+            model: string;
+        }
+        const vehicles: Dictionary<Vehicle> = {
+            738837: { make: 'Ford', model: 'Explorer' },
+            348373: { make: 'Audi', model: 'TT' },
+            38377388: { make: 'Chevy', model: 'Bolt' }
+        };
+
+
+        const friends: Dictionary<{ name: string }> = {
+            bill: { name: 'Bill Hulley' },
+            'amy stahl': { name: 'Amy S' },
+            class: { name: 'Classy Nose' }
+        };
+
+        expect(vehicles['738837'].make).toBe('Ford');
+    });
+});
